@@ -5,7 +5,14 @@
  */
 package orderpickup;
 
-import javax.swing.JOptionPane;
+import java.awt.event.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,15 +20,101 @@ import javax.swing.JOptionPane;
  */
 public class JOrderPickup extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JOrderPickup
-     */
+
+    
+    
     public JOrderPickup() {
         initComponents();
         
+         addRowToJTable();
+         
+         this.setLocationRelativeTo(null);
+         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         showDate();
+         showTime();
+        
+    }
+    
+    void clearText(){
+        jtxtName.setText("");
+        jtxtPickupId.setText("");
+        jtxtContactNo.setText("");
+        jtxtStatus.setText("");
+    }
+    
+      void showDate(){
+    Date d = new Date();
+    SimpleDateFormat s =new SimpleDateFormat("dd-MM-yyyy");
+    jlblDate.setText(s.format(d));
+    }
+    
+    void showTime(){
+     new Timer(0, new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+             Date d = new Date();
+             SimpleDateFormat s = new SimpleDateFormat("hh:mm:ss a");
+             jlblTime.setText(s.format(d));
+         }
+     }).start();
+     
        
     }
+    
+    
+    public class Pickup {
+    String name, pickupId, pickupStatus;
+    String contactNo;
+    
+    public Pickup(String custName, String pickupId, String contact, String status){
+    this.name = custName;
+    this.pickupId = pickupId;
+    this.contactNo = contact;
+    this.pickupStatus = status;
+  
 
+    }
+}
+    
+    
+    public ArrayList Pickup()
+    {
+        ArrayList<Pickup> list = new ArrayList<Pickup>();
+        Pickup p1 = new Pickup("Max","P001","012-5874263","Not Picked");
+        Pickup p2 = new Pickup("Victor","P002","012-5874263","Not Picked");
+        Pickup p3 = new Pickup("James","P003","012-5874263","Not Picked");
+        Pickup p4 = new Pickup("Kim","P004","012-5874263","Not Picked");
+        Pickup p5 = new Pickup("Susan","P005","012-5874263","Not Picked");
+        
+        list.add(p1);
+        list.add(p2);
+        list.add(p3);
+        list.add(p4);
+        list.add(p5);
+           
+        return list;
+    }
+    
+    public void addRowToJTable()
+    {
+    
+        DefaultTableModel model = (DefaultTableModel) jtPickup.getModel();
+        ArrayList<Pickup> list = Pickup();
+        Object rowData[] = new Object[5];
+        for(int i = 0; i < list.size(); i++)
+        {
+            rowData[0] = list.get(i).name;
+            rowData[1] = list.get(i).pickupId;
+            rowData[2] = list.get(i).contactNo;
+            rowData[3] = list.get(i).pickupStatus;
+  
+            model.addRow(rowData);
+   
+    
+        }
+    }
+    
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,44 +124,73 @@ public class JOrderPickup extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jOrder = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jtPickup = new javax.swing.JTable();
+        jtxtName = new javax.swing.JTextField();
+        jtxtPickupId = new javax.swing.JTextField();
+        jtxtContactNo = new javax.swing.JTextField();
+        jtxtStatus = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jbtUpdate = new javax.swing.JButton();
+        jlblDate = new javax.swing.JLabel();
+        jlblTime = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Fiore Flowershop System");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Fiore Flowershop Sdn. Bhd.");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setText("Order Pickup & Delivery ");
+        jLabel2.setText("Order Pickup");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jtPickup.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        jOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Please choose order type--", "Order Pickup", "Order Delivery" }));
-        jOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            },
+            new String [] {
+                "Name", "Pickup ID", "Contact No.", "Status", "Pickup Time"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtPickup.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jOrderMouseClicked(evt);
+                jtPickupMouseClicked(evt);
             }
         });
-        jOrder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jOrderActionPerformed(evt);
-            }
-        });
+        jScrollPane1.setViewportView(jtPickup);
 
-        jButton1.setText("Update");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setText("Name:");
+
+        jLabel5.setText("Pickup ID:");
+
+        jLabel6.setText("Contact No.:");
+
+        jLabel7.setText("Status:");
+
+        jbtUpdate.setText("Update");
+        jbtUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jbtUpdateActionPerformed(evt);
             }
         });
 
@@ -77,54 +199,119 @@ public class JOrderPickup extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(286, 286, 286)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(355, 355, 355)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(98, 98, 98)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(308, 308, 308)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                        .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 893, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(32, 32, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jScrollPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jbtUpdate)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(62, 62, 62)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel7))
+                                        .addGap(18, 18, 18))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jtxtName, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                                    .addComponent(jtxtPickupId)
+                                    .addComponent(jtxtContactNo)
+                                    .addComponent(jtxtStatus))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jlblDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(31, 31, 31)
-                .addComponent(jOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtPickupId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(24, 24, 24))
+                .addComponent(jbtUpdate)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOrderActionPerformed
-   
-    }//GEN-LAST:event_jOrderActionPerformed
-
-    private void jOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jOrderMouseClicked
     
-    }//GEN-LAST:event_jOrderMouseClicked
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(jOrder.getSelectedItem() == "--Please choose order type--"){
-            JOptionPane.showMessageDialog(null, "Please select an order type");
-    }//GEN-LAST:event_jButton1ActionPerformed
     
-   }
+    private void jtPickupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPickupMouseClicked
+  
+        DefaultTableModel model = (DefaultTableModel) jtPickup.getModel();
+        int selectedRowIndex = jtPickup.getSelectedRow();
+        
+        jtxtName.setText(model.getValueAt(selectedRowIndex, 0).toString());
+        jtxtPickupId.setText(model.getValueAt(selectedRowIndex, 1).toString());
+        jtxtContactNo.setText(model.getValueAt(selectedRowIndex, 2).toString());
+        jtxtStatus.setText(model.getValueAt(selectedRowIndex, 3).toString());
+                     
+    }//GEN-LAST:event_jtPickupMouseClicked
+
+    private void jbtUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtUpdateActionPerformed
+     
+        int i = jtPickup.getSelectedRow();
+      
+      if(i >= 0)
+      {
+      jtPickup.setValueAt(jtxtName.getText(), i, 0);
+     jtPickup.setValueAt(jtxtPickupId.getText(), i, 1);
+     jtPickup.setValueAt(jtxtContactNo.getText(), i, 2);
+     jtPickup.setValueAt(jtxtStatus.getText(), i, 3);
+     jtPickup.setValueAt(jlblDate.getText().toString() + " " + jlblTime.getText().toString(), i, 4);
+      }
+        clearText();
+    }//GEN-LAST:event_jbtUpdateActionPerformed
+
+    
+  
     /**
      * @param args the command line arguments
      */
@@ -158,19 +345,25 @@ public class JOrderPickup extends javax.swing.JFrame {
                 new JOrderPickup().setVisible(true);
             }
         });
+             
         
-    
-         
-          
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JComboBox<String> jOrder;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton jbtUpdate;
+    private javax.swing.JLabel jlblDate;
+    private javax.swing.JLabel jlblTime;
+    private javax.swing.JTable jtPickup;
+    private javax.swing.JTextField jtxtContactNo;
+    private javax.swing.JTextField jtxtName;
+    private javax.swing.JTextField jtxtPickupId;
+    private javax.swing.JTextField jtxtStatus;
     // End of variables declaration//GEN-END:variables
 }

@@ -44,6 +44,9 @@ public class OrderPickup {
 
     }else{
                System.out.println("Invalid choice. Please select suitable choice.");
+               System.out.print("Please select type of orders: " + "\n1. Order Pickup\n" + "2. Order Delivery\n" + "Choice: ");
+     
+        
          }
     
     }
